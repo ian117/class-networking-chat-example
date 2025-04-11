@@ -17,7 +17,7 @@ public class Room {
   Room() {}
 
   // Constructor con campos
-  Room(
+  public Room(
     String name, 
     String description) {
 

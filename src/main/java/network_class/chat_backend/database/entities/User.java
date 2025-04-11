@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-class User {
+public class User {
 
   private @Id @GeneratedValue Long id;
   private String firstName;
@@ -19,7 +19,7 @@ class User {
 
   User() {}
 
-  User(
+  public User(
     String firstName, 
     String lastName, 
     String email, 
