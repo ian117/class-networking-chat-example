@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-public class User {
+public class Person {
 
   private @Id @GeneratedValue Long id;
   private String firstName;
@@ -17,9 +17,9 @@ public class User {
   private String dateOfBirth;
   private String curp;
 
-  User() {}
+  Person() {}
 
-  public User(
+  public Person(
     String firstName, 
     String lastName, 
     String email, 
@@ -102,10 +102,10 @@ public class User {
 
     if (this == o)
       return true;
-    if (!(o instanceof User))
+    if (!(o instanceof Person))
       return false;
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) && Objects.equals(this.firstName, user.firstName) && Objects.equals(this.lastName, user.lastName) && Objects.equals(this.email, user.email) && Objects.equals(this.password, user.password) && Objects.equals(this.dateOfBirth, user.dateOfBirth) && Objects.equals(this.curp, user.curp);
+    Person person = (Person) o;
+    return Objects.equals(this.id, person.id) && Objects.equals(this.firstName, person.firstName) && Objects.equals(this.lastName, person.lastName) && Objects.equals(this.email, person.email) && Objects.equals(this.password, person.password) && Objects.equals(this.dateOfBirth, person.dateOfBirth) && Objects.equals(this.curp, person.curp);
   }
 
   @Override
@@ -115,7 +115,7 @@ public class User {
 
   @Override
   public String toString() {
-      return "User{" +
+      return "Person{" +
           "id=" + this.id +
           ", firstName='" + this.firstName + '\'' +
           ", lastName='" + this.lastName + '\'' +

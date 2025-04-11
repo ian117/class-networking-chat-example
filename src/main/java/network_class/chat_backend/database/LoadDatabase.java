@@ -14,10 +14,10 @@ class LoadDatabase {
   private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
   @Bean
-  CommandLineRunner initDatabase(UserRepository userRepository, RoomRepository roomRepository) {
+  CommandLineRunner initDatabase(PersonRepository personRepository, RoomRepository roomRepository) {
 
     return args -> {
-      userRepository.save(new User(
+      personRepository.save(new Person(
        "Hernan",
         "Cortez",
            "reconquista@live.com",
@@ -25,7 +25,7 @@ class LoadDatabase {
      "a date",
             "husjsosahoas8992"));
 
-      userRepository.save(new User(
+      personRepository.save(new Person(
        "Juanc",
         "D Arc",
            "witch@alive.com",
@@ -33,7 +33,7 @@ class LoadDatabase {
      "a date2",
             "asnoasoiao962"));
       
-      userRepository.findAll().forEach(user -> log.info("Preloaded " + user));
+      personRepository.findAll().forEach(person -> log.info("Preloaded " + person));
 
       roomRepository.save(new Room("Math", "Math problems"));
       roomRepository.save(new Room("Miscelaneus", "Any subject"));
