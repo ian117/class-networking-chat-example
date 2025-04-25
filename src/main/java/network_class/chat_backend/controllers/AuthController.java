@@ -25,16 +25,23 @@ public class AuthController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
-        Optional<Person> person = personRepository.findByEmail(request.getEmail());
+        Optional<Person> personOptional = personRepository.findByEmail(request.getEmail());
     
-        if (person.isPresent() && person.get().getPassword().equals(request.getPassword())) {
-            String token = jwtUtil.generateToken(person.get().getEmail()); // Cambiar aquí ✅
+        if (personOptional.isPresent() && personOptional.get().getPassword().equals(request.getPassword())) {
+            Person person = personOptional.get();
+    
+            // Si recibimos una nueva IP, la actualizamos
+            if (request.getLastIpKnown() != null && !request.getLastIpKnown().isEmpty()) {
+                person.setLastIpKnown(request.getLastIpKnown());
+                personRepository.save(person);
+            }
+    
+            String token = jwtUtil.generateToken(person.getEmail());
             return new LoginResponse(token);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
     }
-
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
         if (personRepository.existsByEmail(request.getEmail())) {
@@ -59,6 +66,7 @@ public class AuthController {
     public static class LoginRequest {
         private String email;
         private String password;
+        private String lastIpKnown; 
 
         public String getEmail() {
             return email;
@@ -75,6 +83,10 @@ public class AuthController {
         public void setPassword(String password) {
             this.password = password;
         }
+
+        public String getLastIpKnown() { return lastIpKnown; }
+
+        public void setLastIpKnown(String lastIpKnown) { this.lastIpKnown = lastIpKnown; }
     }
 
     public static class LoginResponse {
