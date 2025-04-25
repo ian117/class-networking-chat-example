@@ -5,6 +5,7 @@ import network_class.chat_backend.database.entities.PersonRepository;
 import network_class.chat_backend.security.JwtUtil;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,26 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
     }
+
+    @PostMapping("/signup")
+    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
+        if (personRepository.existsByEmail(request.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+        }
+
+        Person newPerson = new Person(
+                request.getEmail(),
+                request.getUsername(),
+                request.getPassword(),
+                request.getLastIpKnown()
+        );
+
+        personRepository.save(newPerson);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new SignupResponse("User created successfully"));
+    }
+
 
     // Clases internas DTO
     public static class LoginRequest {
@@ -66,5 +87,35 @@ public class AuthController {
         public String getToken() {
             return token;
         }
+    }
+
+
+    public static class SignupRequest {
+        private String email;
+        private String username;
+        private String password;
+        private String lastIpKnown;
+
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
+
+        public String getPassword() { return password; }
+        public void setPassword(String password) { this.password = password; }
+
+        public String getLastIpKnown() { return lastIpKnown; }
+        public void setLastIpKnown(String lastIpKnown) { this.lastIpKnown = lastIpKnown; }
+    }
+
+    public static class SignupResponse {
+        private String message;
+
+        public SignupResponse(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() { return message; }
     }
 }
