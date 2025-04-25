@@ -14,31 +14,37 @@ class LoadDatabase {
   private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
   @Bean
-  CommandLineRunner initDatabase(PersonRepository personRepository, RoomRepository roomRepository) {
+  CommandLineRunner initDatabase(
+    PersonRepository personRepository, 
+    MessageRepository messageRepository
+  ) {
 
     return args -> {
-      personRepository.save(new Person(
-       "Hernan",
-        "Cortez",
-           "reconquista@live.com",
-        "sadadadijknbaidoando",
-     "a date",
-            "husjsosahoas8992"));
+      Person person1 = new Person(
+        "reconquista@live.com",
+         "Heran Cortez",
+         "#12345",
+             "127.0.0.2");
+            
+      Person person2 = new Person(
+        "witch@alive.com",
+         "Joan D Arc",
+         "#12345",
+             "127.0.0.3");
 
-      personRepository.save(new Person(
-       "Juanc",
-        "D Arc",
-           "witch@alive.com",
-        "sddnidoapado",
-     "a date2",
-            "asnoasoiao962"));
+      personRepository.save(person1);
+
+      personRepository.save(person2);
       
       personRepository.findAll().forEach(person -> log.info("Preloaded " + person));
 
-      roomRepository.save(new Room("Math", "Math problems"));
-      roomRepository.save(new Room("Miscelaneus", "Any subject"));
+      messageRepository.save(new Message(person1, person2, "Soy numero 1, como estas"));
 
-      roomRepository.findAll().forEach(room -> log.info("Preloaded " + room));
+      messageRepository.save(new Message(person2, person1, "Hola, espero estes bien, soy numero 2"));
+
+      messageRepository.findAll().forEach(message -> log.info("Preloaded " + message));
+
+      // roomRepository.findAll().forEach(room -> log.info("Preloaded " + room));
     };
   }
 }
