@@ -26,9 +26,9 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
         Optional<Person> person = personRepository.findByEmail(request.getEmail());
-
+    
         if (person.isPresent() && person.get().getPassword().equals(request.getPassword())) {
-            String token = jwtUtil.generateToken(person.get().getUsername());
+            String token = jwtUtil.generateToken(person.get().getEmail()); // Cambiar aquí ✅
             return new LoginResponse(token);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");

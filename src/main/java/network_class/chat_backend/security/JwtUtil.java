@@ -14,21 +14,21 @@ public class JwtUtil {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME_MS = 86400000; // 24 horas
 
-    public String generateToken(String username) {
+    public String generateToken(String subject) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_MS))
-                .signWith(SECRET_KEY)
-                .compact();
+                   .setSubject(subject)
+                   .setIssuedAt(new Date())
+                   .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_MS))
+                   .signWith(SECRET_KEY)
+                   .compact();
     }
 
     public String validateTokenAndGetUsername(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                   .setSigningKey(SECRET_KEY)
+                   .build()
+                   .parseClaimsJws(token)
+                   .getBody()
+                   .getSubject();
     }
 }
