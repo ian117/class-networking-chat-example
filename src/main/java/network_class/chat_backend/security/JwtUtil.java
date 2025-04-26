@@ -1,8 +1,8 @@
 package network_class.chat_backend.security;
 
 import io.jsonwebtoken.Jwts;
-// import io.jsonwebtoken.SignatureAlgorithm;
-// import java.util.Base64;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Base64;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +12,10 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private static final String SECRET = "miSuperClaveSecreta1234567890MiSuperClaveSecreta1234567890"; // mínimo 256 bits para HS256 // TODO REMOVER ESTO AL FINAL
+    // private static final String SECRET = "miSuperClaveSecreta1234567890MiSuperClaveSecreta1234567890"; // mínimo 256 bits para HS256 // TODO REMOVER ESTO AL FINAL
 
-    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
-    // private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
+    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME_MS = 86400000; // 24 horas
 
     public String generateToken(String subject) {
