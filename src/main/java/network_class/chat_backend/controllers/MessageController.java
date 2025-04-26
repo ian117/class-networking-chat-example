@@ -30,11 +30,11 @@ public class MessageController {
 
     @GetMapping("/conversation/{otherUserId}")
     public ResponseEntity<List<MessageResponse>> getConversation(
-            @PathVariable Long otherUserId,
-            @RequestParam(required = false) Integer limit) {
+        @PathVariable Long otherUserId,
+        @RequestParam(required = false) String limit) {
 
-        List<MessageResponse> conversation = messageService.getConversation(otherUserId, limit);
-        return ResponseEntity.ok(conversation);
+            List<MessageResponse> conversation = messageService.getConversation(otherUserId, limit);
+            return ResponseEntity.ok(conversation);
     }
 
     @GetMapping("/conversation/{otherUserId}/count")

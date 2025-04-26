@@ -58,22 +58,35 @@ public class MessageService {
     }
 
 
-    public List<MessageResponse> getConversation(Long otherUserId, Integer limit) {
+    public List<MessageResponse> getConversation(Long otherUserId, String limitParam) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Person me = personRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        Pageable pageable = limit != null ? PageRequest.of(0, limit) : Pageable.unpaged();
+                Pageable pageable;
 
-        List<Message> messages = messageRepository.findConversation(me.getId(), otherUserId, pageable);
-
-        return messages.stream()
-                .map(m -> new MessageResponse(
-                        m.getSender().getId(),
-                        m.getReceiver().getId(),
-                        m.getMessage(),
-                        m.getCreatedAt()))
-                .toList();
+                if (limitParam == null) {
+                    pageable = PageRequest.of(0, 15); // Default 15 mensajes
+                } else if (limitParam.equalsIgnoreCase("all")) {
+                    pageable = Pageable.unpaged();    // Todos los mensajes
+                } else {
+                    try {
+                        int limit = Integer.parseInt(limitParam);
+                        pageable = PageRequest.of(0, limit);
+                    } catch (NumberFormatException ex) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid limit value");
+                    }
+                }
+        
+                List<Message> messages = messageRepository.findConversation(me.getId(), otherUserId, pageable);
+        
+                return messages.stream()
+                        .map(m -> new MessageResponse(
+                                m.getSender().getId(),
+                                m.getReceiver().getId(),
+                                m.getMessage(),
+                                m.getCreatedAt()))
+                        .toList();
     }
 
     public long countConversation(Long otherUserId) {
